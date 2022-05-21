@@ -42,42 +42,6 @@ def generate_launch_description() -> LaunchDescription:
 
     # List of included launch descriptions
     launch_descriptions = [
-        # Launch Ignition Gazebo with the required ROS<->IGN bridges
-        IncludeLaunchDescription(
-            PythonLaunchDescriptionSource(
-                PathJoinSubstitution(
-                    [
-                        FindPackageShare("ign_moveit2_examples"),
-                        "launch",
-                        "worlds",
-                        LaunchConfiguration("__world_launch_basename"),
-                    ]
-                )
-            ),
-            launch_arguments=[
-                ("use_sim_time", use_sim_time),
-                ("ign_verbosity", ign_verbosity),
-                ("log_level", log_level),
-            ],
-        ),
-        # Spawn robot
-        IncludeLaunchDescription(
-            PythonLaunchDescriptionSource(
-                PathJoinSubstitution(
-                    [
-                        FindPackageShare("ign_moveit2_examples"),
-                        "launch",
-                        "robots",
-                        LaunchConfiguration("__robot_launch_basename"),
-                    ]
-                )
-            ),
-            launch_arguments=[
-                ("use_sim_time", use_sim_time),
-                ("ign_verbosity", ign_verbosity),
-                ("log_level", log_level),
-            ],
-        ),
         # Launch move_group of MoveIt 2
         IncludeLaunchDescription(
             PythonLaunchDescriptionSource(
