@@ -19,26 +19,10 @@ def generate_launch_description() -> LaunchDescription:
     declared_arguments = generate_declared_arguments()
 
     # Get substitution for all arguments
-    world_type = LaunchConfiguration("world_type")
     robot_type = LaunchConfiguration("robot_type")
     rviz_config = LaunchConfiguration("rviz_config")
     use_sim_time = LaunchConfiguration("use_sim_time")
-    ign_verbosity = LaunchConfiguration("ign_verbosity")
     log_level = LaunchConfiguration("log_level")
-
-    # Determine what world/robot combination to launch
-    declared_arguments.append(
-        DeclareLaunchArgument(
-            "__world_launch_basename",
-            default_value=["world_", world_type, ".launch.py"],
-        ),
-    )
-    declared_arguments.append(
-        DeclareLaunchArgument(
-            "__robot_launch_basename",
-            default_value=["robot_", robot_type, ".launch.py"],
-        ),
-    )
 
     # List of included launch descriptions
     launch_descriptions = [
@@ -74,12 +58,6 @@ def generate_declared_arguments() -> List[DeclareLaunchArgument]:
     """
 
     return [
-        # World selection
-        DeclareLaunchArgument(
-            "world_type",
-            default_value="default",
-            description="Name of the world configuration to load.",
-        ),
         # Robot selection
         DeclareLaunchArgument(
             "robot_type",

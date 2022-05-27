@@ -30,9 +30,7 @@ def generate_launch_description() -> LaunchDescription:
     description_filepath = LaunchConfiguration("description_filepath")
     moveit_config_package = "panda_moveit_config"
     robot_type = LaunchConfiguration("robot_type")
-    rviz_config = LaunchConfiguration("rviz_config")
     use_sim_time = LaunchConfiguration("use_sim_time")
-    ign_verbosity = LaunchConfiguration("ign_verbosity")
     log_level = LaunchConfiguration("log_level")
 
     # URDF
@@ -71,30 +69,6 @@ def generate_launch_description() -> LaunchDescription:
         "robot_description_semantic": _robot_description_semantic_xml
     }
 
-    # List of included launch descriptions
-    launch_descriptions = [
-        # Launch world with robot (configured for this example)
-        IncludeLaunchDescription(
-            PythonLaunchDescriptionSource(
-                PathJoinSubstitution(
-                    [
-                        FindPackageShare("ign_moveit2_examples"),
-                        "launch",
-                        "default.launch.py",
-                    ]
-                )
-            ),
-            launch_arguments=[
-                ("world_type", "follow_target"),
-                ("robot_type", robot_type),
-                ("rviz_config", rviz_config),
-                ("use_sim_time", use_sim_time),
-                ("ign_verbosity", ign_verbosity),
-                ("log_level", log_level),
-            ],
-        ),
-    ]
-
     # List of nodes to be launched
     nodes = [
         # Run the example node (C++)
@@ -111,7 +85,7 @@ def generate_launch_description() -> LaunchDescription:
         ),
     ]
 
-    return LaunchDescription(declared_arguments + launch_descriptions + nodes)
+    return LaunchDescription(declared_arguments + nodes)
 
 
 def load_yaml(package_name: str, file_path: str):
@@ -159,29 +133,14 @@ def generate_declared_arguments() -> List[DeclareLaunchArgument]:
             default_value="panda",
             description="Name of the robot to use.",
         ),
-        # Miscellaneous
-        DeclareLaunchArgument(
-            "rviz_config",
-            default_value=path.join(
-                get_package_share_directory("ign_moveit2_examples"),
-                "rviz",
-                "ign_moveit2_examples.rviz",
-            ),
-            description="Path to configuration for RViz2.",
-        ),
         DeclareLaunchArgument(
             "use_sim_time",
             default_value="true",
             description="If true, use simulated clock.",
         ),
         DeclareLaunchArgument(
-            "ign_verbosity",
-            default_value="2",
-            description="Verbosity level for Ignition Gazebo (0~4).",
-        ),
-        DeclareLaunchArgument(
             "log_level",
-            default_value="warn",
+            default_value="info",
             description="The level of logging that is applied to all ROS 2 nodes launched by this script.",
         ),
     ]
